@@ -3,22 +3,16 @@
 
 DMENU_OPTS=(-b -fn "Droid Sans Mono-14:normal" -sf \#ebdbb2 -sb \#d79921 -nf \#ebdbb2 -nb \#282828)
 CWD=$(dirname "$0")
-FILE_VARS="$CWD/variables"
-FILE_ICONS="$CWD/icons"
+FA="$CWD/fa"
 
 # Look up icon
-match_str=$(cat "$FILE_VARS" | dmenu "${DMENU_OPTS[@]}")
-match_line=$(grep -nm 1 "$match_str" "$FILE_VARS" | cut -d: -f1)
+match_str=$(cat "$FA" | dmenu "${DMENU_OPTS[@]}")
+match_icon=$(echo "$match_str" | cut -d\  -f2)
 
-if ! [[ "$match_line" =~ ^[0-9]+$ ]] || [[ "$match_line" -eq 1 ]]; then
+if [[ "$match_str" == "$match_icon" ]]; then
     # Fallback to string input if icon was not found
     match_icon="$match_str"
-else
-    match_icon=$(printf \\u$(sed "${match_line}q;d" "$FILE_ICONS"))
 fi
-
-# Debug print
-# echo -n "$match_str @ $match_line ($match_icon)"
 
 # i3 integration
 # Thanks to https://stackoverflow.com/a/24225599
