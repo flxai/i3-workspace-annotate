@@ -10,7 +10,7 @@ FILE_ICONS="$CWD/icons"
 match_str=$(cat "$FILE_VARS" | dmenu "${DMENU_OPTS[@]}")
 match_line=$(grep -nm 1 "$match_str" "$FILE_VARS" | cut -d: -f1)
 
-if ! [[ "$match_line" =~ ^[0-9]+$ ]]; then
+if ! [[ "$match_line" =~ ^[0-9]+$ ]] || [[ "$match_line" -eq 1 ]]; then
     # Fallback to string input if icon was not found
     match_icon="$match_str"
 else
@@ -25,7 +25,9 @@ fi
 i3_ws_id=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
 
 # Prepend id to workspaces 4+
-if [[ "$i3_ws_id" -gt 3 ]]; then
+if [[ -z "$match_str" ]]; then
+    i3_ws_name="$i3_ws_id"
+elif [[ "$i3_ws_id" -gt 3 ]]; then
     i3_ws_name="$i3_ws_id:${i3_ws_id} $match_icon"
 else
     i3_ws_name="$i3_ws_id:$match_icon"
