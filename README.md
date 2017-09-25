@@ -19,5 +19,5 @@ curl -s "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/
 
 ### `icons`
 ```bash
-curl -s "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less" | grep '@fa-var-' | sed -r 's/@fa-var-([^:]+): "([^"]+)";/\2/' > icons
+curl -s "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less" | grep '@fa-var-' | sed -r 's/@fa-var-([^:]+): "\\([^"]+)";/\2/' > icons
 ```
