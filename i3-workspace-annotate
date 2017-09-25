@@ -1,0 +1,34 @@
+#!/bin/bash
+# Annotate an i3 workspace with a Font Awesome icon
+
+DMENU_OPTS=(-b -fn "Droid Sans Mono-14:normal" -sf \#ebdbb2 -sb \#d79921 -nf \#ebdbb2 -nb \#282828)
+CWD=$(dirname "$0")
+FILE_VARS="$CWD/variables"
+FILE_ICONS="$CWD/icons"
+
+# Look up icon
+match_str=$(cat "$FILE_VARS" | dmenu "${DMENU_OPTS[@]}")
+match_line=$(grep -nm 1 "$match_str" "$FILE_VARS" | cut -d: -f1)
+
+if ! [[ "$match_line" =~ ^[0-9]+$ ]]; then
+    # Fallback to string input if icon was not found
+    match_icon="$match_str"
+else
+    match_icon=$(printf \\u$(sed "${match_line}q;d" "$FILE_ICONS"))
+fi
+
+# Debug print
+# echo -n "$match_str @ $match_line ($match_icon)"
+
+# i3 integration
+# Thanks to https://stackoverflow.com/a/24225599
+i3_ws_id=$(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num')
+
+# Prepend id to workspaces 4+
+if [[ "$i3_ws_id" -gt 3 ]]; then
+    i3_ws_name="$i3_ws_id:${i3_ws_id} $match_icon"
+else
+    i3_ws_name="$i3_ws_id:$match_icon"
+fi
+
+i3-msg -q "rename workspace to $i3_ws_name"
