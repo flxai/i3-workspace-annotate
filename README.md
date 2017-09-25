@@ -8,6 +8,7 @@ This script utilizes the following applications:
  * `cut`
  * `dmenu`
  * `grep`
+ * `jp`
 
 ## Font Awesome
 The script searches for [human readable names of Font Awesome icons](https://github.com/FortAwesome/Font-Awesome/blob/master/less/variables.less). The files `variables` and `icons` were extracted as follows.
